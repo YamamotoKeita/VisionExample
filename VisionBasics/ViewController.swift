@@ -9,7 +9,7 @@ import Photos
 import UIKit
 import Vision
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController, UINavigationControllerDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
 
@@ -176,34 +176,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
 
-    // MARK: - UIImagePickerControllerDelegate
-
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        // Dismiss picker, returning to original root viewController.
-        dismiss(animated: true, completion: nil)
-    }
-
-    internal func imagePickerController(_ picker: UIImagePickerController,
-                                        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        // Extract chosen image.
-        let originalImage: UIImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-
-        // Display image on screen.
-        show(originalImage)
-
-        // Convert from UIImageOrientation to CGImagePropertyOrientation.
-        let cgOrientation = CGImagePropertyOrientation(originalImage.imageOrientation)
-
-        // Fire off request based on URL of chosen photo.
-        guard let cgImage = originalImage.cgImage else {
-            return
-        }
-        faceRecognizer.start(image: cgImage, orientation: cgOrientation)
-
-        // Dismiss the picker to return to original view controller.
-        dismiss(animated: true, completion: nil)
-    }
-
     func show(_ image: UIImage) {
 
         // Remove previous paths & image
@@ -251,3 +223,30 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 }
 
+extension ViewController: UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        // Dismiss picker, returning to original root viewController.
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                                        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        // Extract chosen image.
+        let originalImage: UIImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+
+        // Display image on screen.
+        show(originalImage)
+
+        // Convert from UIImageOrientation to CGImagePropertyOrientation.
+        let cgOrientation = CGImagePropertyOrientation(originalImage.imageOrientation)
+
+        // Fire off request based on URL of chosen photo.
+        guard let cgImage = originalImage.cgImage else {
+            return
+        }
+        faceRecognizer.start(image: cgImage, orientation: cgOrientation)
+
+        // Dismiss the picker to return to original view controller.
+        dismiss(animated: true, completion: nil)
+    }
+}

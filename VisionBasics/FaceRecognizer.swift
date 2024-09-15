@@ -10,7 +10,7 @@ class FaceRecognizer {
                                                         orientation: orientation,
                                                         options: [:])
 
-        // TODO quere削除を試す
+        // TODO queue削除を試す
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
 
@@ -29,7 +29,6 @@ class FaceRecognizer {
             return
         }
 
-        // Perform drawing on the main thread.
         DispatchQueue.main.async { [weak self] in
             guard let self, let results = request?.results as? [VNFaceObservation] else {
                 return
@@ -38,6 +37,7 @@ class FaceRecognizer {
         }
     }
 
+    // TODO Check what this function do
     private func drawFeatures(onFaces faces: [VNFaceObservation]) {
         guard let outputLayer else { return }
 
@@ -104,7 +104,7 @@ class FaceRecognizer {
         outputLayer.setNeedsDisplay()
     }
 
-
+    // TODO Check what this function do
     private func boundingBox(forRegionOfInterest: CGRect, withinImageBounds bounds: CGRect) -> CGRect {
         let imageWidth = bounds.width
         let imageHeight = bounds.height
